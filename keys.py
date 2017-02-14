@@ -1,0 +1,5 @@
+token = "Mjc1NDczMzUzODUzMjM5Mjk2.C3LkcQ.y_7C-m-72dIo7a2g6nAzRlcuWx8"
+
+steam_key = "05EFF505B55CAE53BD7066997BD106EE"
+
+weather_key = "d374361647041c4a31115e2081f7a4ef"
