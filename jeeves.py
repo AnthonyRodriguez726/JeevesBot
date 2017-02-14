@@ -1,4 +1,6 @@
+from keys import *
 import discord
+import asyncio
 from discord.ext import commands
 import discord.utils
 import time
@@ -8,17 +10,19 @@ import steamsearch
 import forecastio
 
 
-api_key = "d374361647041c4a31115e2081f7a4ef"
+api_key = weather_key
 lat = 28.602427
 lng = -81.200060
 
 forecast = forecastio.load_forecast(api_key, lat, lng)
 
-steamsearch.set_key("05EFF505B55CAE53BD7066997BD106EE", "anotherSession", cache=True)
+steamsearch.set_key(steam_key, "anotherSession", cache=True)
 
 description = 'Jeeves Bot. Your personal helper bot.'
 
 bot = commands.Bot(command_prefix='!', description=description)
+
+
 
 @bot.event
 async def on_ready():
@@ -27,24 +31,46 @@ async def on_ready():
     print(bot.user.id)
     print('------')
 
+@bot.command()
+async def jeeves():
+    await bot.say(
+        """```Here's what I can do:
+        ```
+        """
+    )
 
 @bot.command()
 async def hello():
     await bot.say("Hello!")
 
-items = []
 
 @bot.command()
 async def add_item(item):
-    listLen = len(items)
-    items.insert(listLen, item)
+    need_file = open("need_list.txt", "r")
+    need_lines = need_file.readlines()
+    need_file.close()
+
+    listLen = len(need_lines)
+    need_lines.insert(listLen, item+"\n")
     itemMessage = item + " has been added to your list."
     await bot.say(itemMessage)
-    save_items()
+
+    lenList = len(need_lines)
+    file = open("need_list.txt", "w")
+    counter = 0
+    for _ in range(lenList):
+        line = need_lines[counter]
+        file.write(line)
+        counter += 1
+    file.close()
 
 @bot.command()
 async def remove_item(item):
-    if item in items: items.remove(item)
+    need_file = open("need_list.txt", "r")
+    need_lines = need_file.readlines()
+    need_file.close()
+
+    if item in need_lines: need_lines.remove(item)
     
     file = open("need_list.txt", "r")
     lines = file.readlines()
@@ -54,15 +80,6 @@ async def remove_item(item):
     for line in lines:
         if line!=item+"\n":
             file.write(line)
-
-def save_items():
-    listLen = len(items)
-    file = open("need_list.txt", "w")
-    counter = 0
-    for _ in range(listLen):
-        line = items[counter] + "\n"
-        file.write(line)
-        counter += 1
     file.close()
 
 @bot.command()
@@ -198,19 +215,57 @@ async def new_releases(limit=5):
 
     await bot.say(releases)
 
+
+async def my_background_task():
+    await bot.wait_until_ready()
+    counter = 0
+    channel = discord.Object(id=280886485438169090)
+
+    byDay = forecast.daily()
+
+    weatherData = []
+    for current in byDay.data:
+        weatherData.append(current.summary)
+
+    minTemp = []
+    for current in byDay.data:
+        minTemp.append(current.temperatureMin)
+
+    maxTemp = []
+    for current in byDay.data:
+        maxTemp.append(current.temperatureMax)
+
+    rainChance = []
+    for current in byDay.data:
+        rainChance.append(current.precipProbability)
+
+    itemsStr = ",".join(need_list)
+
+
+    updateMsg = """```Here is your daily update.\n\n
+-----Weather-----\n
+%s\n
+Min Temperature: %s\n
+Max Temperature: %s\n
+Rain Chance: %d\n\n
+
+-----Shopping List-----\n
+%s
+
+    ```
+    """ % (weatherData[0], minTemp[0], maxTemp[0], rainChance[0], itemsStr)
+    
+    print(updateMsg)
+
+    while not bot.is_closed:
+        counter += 1
+        await bot.send_message(channel, updateMsg)
+        await asyncio.sleep(10800) # task runs every 60 seconds
+
+bot.loop.create_task(my_background_task())
+
 # - WEATHER METHODS -
 
-# read = open("weekFromNow.txt")
-
-# today = time.strftime("%Y-%m-%d")
-# u = datetime.datetime.strptime(today, "%Y-%m-%d").date()
-# d = datetime.timedelta(days=1)
-# weekFromNow = u + d
-# weekFromNow = str(weekFromNow)
-
-# file = open("weekFromNow.txt", "w")
-# file.write(weekFromNow)
-# file.close()
 
 
 @bot.command()
@@ -321,4 +376,4 @@ async def weekly_forecast():
 
 
 
-bot.run('Mjc1NDczMzUzODUzMjM5Mjk2.C3LkcQ.y_7C-m-72dIo7a2g6nAzRlcuWx8')
+bot.run(token)
