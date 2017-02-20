@@ -26,6 +26,7 @@ steamsearch.set_key(steam_key, "anotherSession", cache=True)
 description = 'Jeeves Bot. Your personal helper bot.'
 
 bot = commands.Bot(command_prefix='!', description=description)
+#bot = commands.Bot(command_prefix='!', self_bot=True)
 
 
 
@@ -47,6 +48,19 @@ async def jeeves():
 @bot.command()
 async def hello(description="Says Hello!"):
     await bot.say("Hello!")
+
+
+@bot.command()
+async def on_message(message):
+    if message.content.startswith('!deleteme'):
+        msg = await bot.send_message(message.channel, 'I will delete myself now...')
+        await bot.delete_message(msg)
+
+@bot.command(pass_context=True)
+async def wink(ctx):
+    channel = bot.get_channel(ctx.message.channel.id)
+    await bot.send_file(channel, "images/wink.png")
+    await bot.delete_message(ctx.message)
 
 # --- SHOPPING LIST ---
 @bot.command()
@@ -158,15 +172,17 @@ async def to_do():
     await bot.say(to_do)
 
 # --- RECIPES ---
-@bot.command()
-async def recipe(ingredient):
+@bot.command(pass_context=True)
+async def recipe(ctx,ingredient):
     url = "https://api.edamam.com/"
     search = ingredient
     search_addon = "search?q="+search
     id_addon = "&app_id="+food_id
     key_addon = "&app_key="+food_key
     full_search = url+search_addon+id_addon+key_addon
+    channel = bot.get_channel(ctx.message.channel.id)
     
+
     r = requests.get(full_search)
     recipe = r.json()
     
@@ -174,6 +190,12 @@ async def recipe(ingredient):
     label = recipe["hits"][0]["recipe"]["label"]
     image = recipe["hits"][0]["recipe"]["image"]
     ingredients = recipe["hits"][0]["recipe"]["ingredientLines"]
+    calories = recipe["hits"][0]["recipe"]["calories"]
+    int(calories)
+
+    filename = image.split('/')[-1]
+    urllib.request.urlretrieve(image, "images/"+filename)
+    image_path = "images/"+filename
 
     ingredient_list = []
     for ing in ingredients:
@@ -184,13 +206,14 @@ async def recipe(ingredient):
         final_ingredients += ing+"\n"
 
     recipe_message = """
-**Here is the most relevant recipe based on your search.** \n \n
-%s \n \n
-<%s> \n
+**Here is the most relevant recipe based on your search.** \n
 %s
-    """ % (label, url, image)
+Calories: %d \n
+URL to recipe: <%s> \n
+    """ % (label, calories, url)
 
-    await bot.say(recipe_message)
+    # await bot.say(recipe_message)
+    await bot.send_file(channel, image_path, content=recipe_message)
 
 @bot.command()
 async def get_recipes(ingredient, to_amount):
@@ -254,6 +277,11 @@ async def ingredients(recipe):
     ingredients_message += "\n<%s>" % (url)
 
     await bot.say(ingredients_message)
+
+@bot.command(pass_context=True)
+async def test(ctx):
+    channel = bot.get_channel(ctx.message.channel.id)
+    await bot.send_file(channel, "images/wink.png", content="Test")
 
 @bot.command()
 async def servers():
@@ -543,3 +571,4 @@ async def weekly_forecast():
 
 
 bot.run(token)
+#bot.run(self_token, bot=False)
