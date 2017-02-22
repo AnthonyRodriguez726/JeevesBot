@@ -3,7 +3,6 @@ import discord
 import asyncio
 from discord.ext import commands
 import discord.utils
-import time
 import datetime
 import requests
 import urllib.request
@@ -14,10 +13,9 @@ from lxml import etree
 import os, sys
 import aiohttp
 from urllib.parse import parse_qs
-
-import steamsearch
 import forecastio
 
+import steamsearch
 
 api_key = weather_key
 lat = 28.602427
@@ -27,9 +25,9 @@ forecast = forecastio.load_forecast(api_key, lat, lng)
 
 steamsearch.set_key(steam_key, "anotherSession", cache=True)
 
-description = 'Jeeves Bot. Your personal helper bot.'
+cogs = ['cogs.edward', 'cogs.weather', 'cogs.misc']
 
-#bot = commands.Bot(command_prefix='!', self_bot=True)
+description = 'Jeeves Bot. Your personal helper bot.'
 
 file_status = open("restart_status.txt", "r")
 restart_status = file_status.readline()
@@ -45,6 +43,14 @@ if restart_status == "0":
         print('------')
         channel = bot.get_channel('276237909378465794')
         await bot.send_message(channel, 'Jeeves Online.')
+        for cog in cogs:
+            try:
+                bot.load_extension(cog)
+            except (AttributeError, ImportError) as e:
+                print("```py\n{}: {}\n```".format(type(e).__name__, str(e)))
+                return
+            print("{} loaded.".format(cog))
+
 elif restart_status == "1":
     bot = commands.Bot(command_prefix='!', self_bot=True)
 
@@ -56,6 +62,13 @@ elif restart_status == "1":
         print('------')
         channel = bot.get_channel('276237909378465794')
         await bot.send_message(channel, 'Self Bot Online.')
+        for cog in cogs:
+            try:
+                bot.load_extension(cog)
+            except (AttributeError, ImportError) as e:
+                print("```py\n{}: {}\n```".format(type(e).__name__, str(e)))
+            return
+        print("{} loaded.".format(cog))
 else:
     bot = commands.Bot(command_prefix='!', description=description)
 
@@ -67,30 +80,76 @@ else:
         print('------')
         channel = bot.get_channel('276237909378465794')
         await bot.send_message(channel, 'Jeeves Online.')
-
-@bot.command()
-async def jeeves():
-    await bot.say(
-        """```Here's what I can do:
-        ```
-        """
-    )
-
-@bot.command()
-async def hello(description="Says Hello!"):
-    await bot.say("Hello!")
-
-@bot.command()
-async def run_script(script):
-    return script
-    run
-
+        for cog in cogs:
+            try:
+                bot.load_extension(cog)
+            except (AttributeError, ImportError) as e:
+                print("```py\n{}: {}\n```".format(type(e).__name__, str(e)))
+                return
+            print("{} loaded.".format(cog))
 
 @bot.command(pass_context=True)
 async def wink(ctx):
     channel = bot.get_channel(ctx.message.channel.id)
     await bot.send_file(channel, "images/wink.png")
     await bot.delete_message(ctx.message)
+
+
+@bot.command(pass_context=True)
+async def afk(ctx):
+    # 1 == afk | 0 == not afk
+    initial_author = ctx.message.author.name
+    initial_path = "afk/"+initial_author+".txt"
+    check_path = os.path.exists(initial_path)
+    if check_path == False:
+        file = open(initial_path, "w+")
+        file.write("0")
+        file.close()
+
+    initial_file = open(initial_path, 'r')
+    initial_status = initial_file.readline()
+    
+    if initial_status == "1":
+        await bot.delete_message(ctx.message)
+    elif initial_status == "0":
+        await bot.delete_message(ctx.message)
+        author =  ctx.message.author.name
+        path = "afk/"+author+".txt"
+        file = open(path, 'w')
+        file.write("1")
+        file.close()
+        await bot.say("*"+author+" is now AFK.*")
+    else:
+        await bot.delete_message(ctx.message)
+        author =  ctx.message.author.name
+        path = "afk/"+author+".txt"
+        file = open(path, 'w')
+        file.write("1")
+        file.close()
+        await bot.say("*"+author+" is now AFK.*")
+    
+
+@bot.command(pass_context=True)
+async def back(ctx):
+    initial_author = ctx.message.author.name
+    initial_path = "afk/"+initial_author+".txt"
+    initial_file = open(initial_path, 'r')
+    initial_status = initial_file.readline()
+
+    if initial_status == "1":
+        await bot.delete_message(ctx.message)
+        author = ctx.message.author.name
+        path = "afk/"+author+".txt"
+        file = open(path, 'w')
+        file.write("0")
+        file.close()
+        await bot.say("*"+author+" is no longer AFK.*")
+    elif initial_status == "0":
+        await bot.delete_message(ctx.message)
+    else:
+        await bot.delete_message(ctx.message)
+
+
 
 # --- SHOPPING LIST ---
 @bot.command()
@@ -203,7 +262,7 @@ async def to_do():
 
 # --- RECIPES ---
 @bot.command(pass_context=True)
-async def recipe(ctx,ingredient):
+async def recipe(ctx, *, ingredient):
     url = "https://api.edamam.com/"
     search = ingredient
     search_addon = "search?q="+search
@@ -284,7 +343,7 @@ async def get_recipes(ingredient, to_amount):
     await bot.say(recipes_message)
 
 @bot.command()
-async def ingredients(recipe):
+async def ingredients(*,recipe):
     url = "https://api.edamam.com/"
     search = recipe
     search_addon = "search?q="+search
@@ -307,10 +366,7 @@ async def ingredients(recipe):
     ingredients_message += "\n<%s>" % (url)
 
     await bot.say(ingredients_message)
-
-@bot.command(pass_context=True)
-async def test(ctx):
-    print("test")
+    
 
 @bot.command()
 async def servers():
@@ -452,160 +508,7 @@ async def new_releases(limit=5):
     await bot.say(releases)
 
 
-async def my_background_task():
-    await bot.wait_until_ready()
-    counter = 0
-    channel = discord.Object(id=280886485438169090)
 
-    byDay = forecast.daily()
-
-    weatherData = []
-    for current in byDay.data:
-        weatherData.append(current.summary)
-
-    minTemp = []
-    for current in byDay.data:
-        minTemp.append(current.temperatureMin)
-
-    maxTemp = []
-    for current in byDay.data:
-        maxTemp.append(current.temperatureMax)
-
-    rainChance = []
-    for current in byDay.data:
-        rainChance.append(current.precipProbability)
-
-
-
-    updateMsg = """```Here is your daily update.\n\n
------Weather-----\n
-%s\n
-Min Temperature: %s\n
-Max Temperature: %s\n
-Rain Chance: %d\n\n
-
------Shopping List-----\n
-test
-
-    ```
-    """ % (weatherData[0], minTemp[0], maxTemp[0], rainChance[0])
-
-    while not bot.is_closed:
-        counter += 1
-        await bot.send_message(channel, updateMsg)
-        await asyncio.sleep(86400) # task runs every 60 seconds
-
-bot.loop.create_task(my_background_task())
-
-# - WEATHER METHODS -
-
-
-
-@bot.command()
-async def weekly_forecast():
-    weatherMessage = ("```--- Here is your weekly weather forecast ---\n\n")
-    byDay = forecast.daily()
-
-    weatherData = []
-    for dailyData in byDay.data:
-        weatherData.append(dailyData.summary)
-
-    minTempData = []
-    for dailyData in byDay.data:
-        minTempData.append(dailyData.temperatureMin)
-
-    maxTempData = []
-    for dailyData in byDay.data:
-        maxTempData.append(dailyData.temperatureMax)
-
-    rainChance = []
-    for dailyData in byDay.data:
-        conversion = dailyData.precipProbability * 100
-        rainChance.append(conversion)
-
-    options = {
-            "Sunday":{
-                0: "Today",
-                1: "Monday",
-                2: "Tuesday",
-                3: "Wednesday",
-                4: "Thursday",
-                5: "Friday",
-                6: "Saturday",
-                7: "Sunday"
-            },
-            "Monday":{
-                0: "Today",
-                1: "Tuesday",
-                2: "Wednesday",
-                3: "Thursday",
-                4: "Friday",
-                5: "Saturday",
-                6: "Sunday",
-                7: "Monday"
-            },
-            "Tuesday":{
-                0: "Today",
-                1: "Wednesday",
-                2: "Thursday",
-                3: "Friday",
-                4: "Saturday",
-                5: "Sunday",
-                6: "Monday",
-                7: "Tuesday"
-            },
-            "Wednesday":{
-                0: "Today",
-                1: "Thursday",
-                2: "Friday",
-                3: "Saturday",
-                4: "Sunday",
-                5: "Monday",
-                6: "Tuesday",
-                7: "Wednesday"
-            },
-            "Thursday":{
-                0: "Today",
-                1: "Friday",
-                2: "Saturday",
-                3: "Sunday",
-                4: "Monday",
-                5: "Tuesday",
-                6: "Wednesday",
-                7: "Thursday"
-            },
-            "Friday":{
-                0: "Today",
-                1: "Saturday",
-                2: "Sunday",
-                3: "Monday",
-                4: "Tuesday",
-                5: "Wednesday",
-                6: "Thursday",
-                7: "Friday"
-            },
-            "Saturday":{
-                0: "Today",
-                1: "Sunday",
-                2: "Monday",
-                3: "Tuesday",
-                4: "Wednesday",
-                5: "Thursday",
-                6: "Friday",
-                7: "Saturday"
-            }
-        }
-
-    todaysDay = time.strftime("%A")
-    counter = 0
-    for _ in range(len(weatherData)):
-
-        weatherMessage += "%s - %s\nTemperate Min: %d\nTemperate Max: %d\nRain Change: %d%%\n\n" % (options[todaysDay].get(counter), weatherData[counter], minTempData[counter], maxTempData[counter], rainChance[counter])
-        counter += 1
-
-    weatherMessage += "```" 
-
-    await bot.say(weatherMessage)
 
 def parse_google_card(node):
     if node is None:
@@ -845,6 +748,51 @@ async def g(*, query):
 
         await bot.say(msg)
 
+
+
+#Rogue Weather Method
+async def my_background_task():
+    await bot.wait_until_ready()
+    counter = 0
+    channel = discord.Object(id=280886485438169090)
+
+    byDay = forecast.daily()
+
+    weatherData = []
+    for current in byDay.data:
+        weatherData.append(current.summary)
+
+    minTemp = []
+    for current in byDay.data:
+        minTemp.append(current.temperatureMin)
+
+    maxTemp = []
+    for current in byDay.data:
+        maxTemp.append(current.temperatureMax)
+
+    rainChance = []
+    for current in byDay.data:
+        rainChance.append(current.precipProbability)
+
+        updateMsg = """```Here is your daily update.\n\n
+-----Weather-----\n
+%s\n
+Min Temperature: %s\n
+Max Temperature: %s\n
+Rain Chance: %d\n\n
+
+-----Shopping List-----\n
+test
+
+        ```
+        """ % (weatherData[0], minTemp[0], maxTemp[0], rainChance[0])
+
+        while not bot.is_closed:
+            counter += 1
+            await bot.send_message(channel, updateMsg)
+            await asyncio.sleep(86400) # task runs once per day
+
+bot.loop.create_task(my_background_task())
 
 if restart_status == "0":
     bot.run(token)

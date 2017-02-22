@@ -121,7 +121,6 @@ def _check_session_set():
     if not isinstance(STEAM_SESSION, str) or STEAM_SESSION == "df132829b73cdaac578ffb27":
         raise SteamSessionNotSet
 
-
 def exchange(amount, from_curr, to_curr, timeout=10):
     """Converts an amount of money from one currency to another
     Args:
@@ -607,7 +606,6 @@ def get_user(steamid, timeout=10):
             player = data["response"]["players"][0]
             return UserResult(player)
     return None
-
 
 def get_user_library(steamid, timeout=10):
     """Gets a list of all the games a user owns
