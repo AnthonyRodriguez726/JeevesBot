@@ -85,18 +85,6 @@ class MaybeUnlock:
 class HTTPClient:
     """Represents an HTTP client sending HTTP requests to the Discord API."""
 
-    BASE          = 'https://discordapp.com'
-    API_BASE      = BASE     + '/api/v6'
-    GATEWAY       = API_BASE + '/gateway'
-    USERS         = API_BASE + '/users'
-    ME            = USERS    + '/@me'
-    REGISTER      = API_BASE + '/auth/register'
-    LOGIN         = API_BASE + '/auth/login'
-    LOGOUT        = API_BASE + '/auth/logout'
-    GUILDS        = API_BASE + '/guilds'
-    CHANNELS      = API_BASE + '/channels'
-    APPLICATIONS  = API_BASE + '/oauth2/applications'
-
     SUCCESS_LOG = '{method} {url} has received {text}'
     REQUEST_LOG = '{method} {url} with {json} has returned {status}'
 
@@ -154,7 +142,7 @@ class HTTPClient:
 
                     # check if we have rate limit header information
                     remaining = r.headers.get('X-Ratelimit-Remaining')
-                    if remaining == '0':
+                    if remaining == '0' and r.status != 429:
                         # we've depleted our current bucket
                         if header_bypass_delay is None:
                             now = parsedate_to_datetime(r.headers['Date'])
@@ -380,7 +368,6 @@ class HTTPClient:
         return self.request(r)
 
     def logs_from(self, channel_id, limit, before=None, after=None, around=None):
-        url = '{0.CHANNELS}/{1}/messages'.format(self, channel_id)
         params = {
             'limit': limit
         }

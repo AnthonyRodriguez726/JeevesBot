@@ -121,5 +121,49 @@ class Weather():
 
         await self.bot.say(weatherMessage)
 
+    #Rogue Weather Method
+    async def my_background_task(self):
+        await self.bot.wait_until_ready()
+        counter = 0
+        channel = discord.Object(id=280886485438169090)
+
+        byDay = forecast.daily()
+
+        weatherData = []
+        for current in byDay.data:
+            weatherData.append(current.summary)
+
+        minTemp = []
+        for current in byDay.data:
+            minTemp.append(current.temperatureMin)
+
+        maxTemp = []
+        for current in byDay.data:
+            maxTemp.append(current.temperatureMax)
+
+        rainChance = []
+        for current in byDay.data:
+            rainChance.append(current.precipProbability*100)
+
+            updateMsg = """```Here is your daily update.\n\n
+    -----Weather-----\n
+    %s\n
+    Min Temperature: %s\n
+    Max Temperature: %s\n
+    Rain Chance: %d%%\n\n
+
+    -----Shopping List-----\n
+    test
+
+            ```
+            """ % (weatherData[0], minTemp[0], maxTemp[0], rainChance[0])
+
+        while not self.bot.is_closed:
+            counter += 1
+            await self.bot.send_message(channel, updateMsg)
+            await asyncio.sleep(86400) # task runs once per day
+
+        self.bot.loop.create_task(my_background_task())
+
 def setup(bot):
     bot.add_cog(Weather(bot))
