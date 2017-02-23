@@ -8,15 +8,8 @@ import os, sys
 
 from discord.ext import commands
 
-import forecastio
 
-api_key = weather_key
-lat = 28.602427
-lng = -81.200060
-
-forecast = forecastio.load_forecast(api_key, lat, lng)
-
-cogs = ['cogs.edward', 'cogs.weather', 'cogs.misc', 'cogs.user_based', 'cogs.apartment', 'cogs.recipe', 'cogs.admin', 'cogs.steam', 'cogs.google']
+cogs = ['cogs.edward', 'cogs.misc', 'cogs.user_based', 'cogs.apartment', 'cogs.recipe', 'cogs.admin', 'cogs.steam', 'cogs.google']
 
 description = 'Jeeves Bot. Your personal helper bot.'
 
