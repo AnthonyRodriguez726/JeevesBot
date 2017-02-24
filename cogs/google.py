@@ -247,6 +247,12 @@ class Google():
 
 			await self.bot.say(msg)
 
+	@commands.command()
+	async def lmgtfy(self, *, search):
+		url = "http://lmgtfy.com/?q="
+		search = search.replace(" ", "+")
+		await self.bot.say(url+""+""+search)
+
 
 def setup(bot):
 	bot.add_cog(Google(bot))

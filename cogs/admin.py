@@ -12,7 +12,7 @@ class Admin():
 	        file = open("restart_status.txt", "w")
 	        file.write("1")
 	        file.close()
-	        await self.bot.say("Rebooting as self self.bot...")
+	        await self.bot.say("Rebooting as self bot...")
 	        os.execl(sys.executable, sys.executable, *sys.argv)
 	    else:
 	        return
