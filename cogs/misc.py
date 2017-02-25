@@ -24,7 +24,7 @@ class Misc():
 
 	@commands.command()
 	async def servers(self):
-		servers = str(len(bot.servers))
+		servers = str(len(self.bot.servers))
 		server_message = "Jeeves is currently being used on "+servers+" server(s)."
 		await self.bot.say(server_message)
 
@@ -50,25 +50,28 @@ class Misc():
 				search = url+word
 			else:
 				word = word.replace(" ", "+")
-				word_num = 0
+				word_num = 1
 				search = url+word
 
 		else:
 			word = word.replace(" ", "+")
 			search = url+word
-			word_num = 0
+			word_num = 1
 
 		r = requests.get(search)
 		definitions = r.json()
 		word_num = int(word_num)
+		word_num -= 1
+		word_amount = len(definitions["list"])
 		word = definitions["list"][word_num]["word"]
 		definition = definitions["list"][word_num]["definition"]
 		example = definitions["list"][word_num]["example"]
 		
 		urban_message = ("```Word: %s \n\n"
 		"Definition: %s \n\n"
-		"Example: %s \n```"
-		) % (word, definition, example)
+		"Example: %s \n\n\n"
+		"Result %d of %d```"
+		) % (word, definition, example, word_num+1, word_amount)
 
 		await self.bot.say(urban_message)
 		
