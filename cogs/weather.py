@@ -17,6 +17,7 @@ class Weather():
 
     @commands.command()
     async def weekly_forecast(self):
+        """Displays the weekly forecast"""
         weatherMessage = ("```--- Here is your weekly weather forecast ---\n\n")
         byDay = forecast.daily()
 

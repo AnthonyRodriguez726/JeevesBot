@@ -12,7 +12,7 @@ class Steam():
     # -STEAM METHODS-
     @commands.command()
     async def steam_sales(self, limit=7):
-
+        """Shows current steam sales"""
         specials = steamsearch.specials(limit=limit)
         games = [special for special in specials]
 
@@ -55,6 +55,7 @@ class Steam():
 
     @commands.command()
     async def most_played(self, limit=5):
+        """Shows the most played steam games"""
         most_played = steamsearch.top_game_playercounts(limit=limit)
 
         playercounts = "--- TOP PLAYERCOUNTS --- \n\n"
@@ -67,6 +68,7 @@ class Steam():
 
     @commands.command()
     async def top_sellers(self, limit=5):
+        """Shows the current top steam sellers"""
         top_sellers = steamsearch.top_sellers(limit=limit)
         games = [top_seller for top_seller in top_sellers]
 
@@ -93,6 +95,7 @@ class Steam():
 
     @commands.command()
     async def new_releases(self, limit=5):
+        """Shows new steam releases"""
         new_releases = steamsearch.new_releases(limit=limit)
         games = [new_release for new_release in new_releases]
 

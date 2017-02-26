@@ -8,33 +8,36 @@ class Admin():
 
 	@commands.command(pass_context=True)
 	async def self_bot(self, ctx):
-	    if discord.utils.get(ctx.message.author.roles, name="Admin"):
-	        file = open("restart_status.txt", "w")
-	        file.write("1")
-	        file.close()
-	        await self.bot.say("Rebooting as self bot...")
-	        os.execl(sys.executable, sys.executable, *sys.argv)
-	    else:
-	        return
+		"""Reboots Jeeves into Self Bot mode"""
+		if discord.utils.get(ctx.message.author.roles, name="Admin"):
+			file = open("restart_status.txt", "w")
+			file.write("1")
+			file.close()
+			await self.bot.say("Rebooting as self bot...")
+			os.execl(sys.executable, sys.executable, *sys.argv)
+		else:
+			return
 
 	@commands.command(pass_context=True)
 	async def restart(self, ctx):
-	    if discord.utils.get(ctx.message.author.roles, name="Admin"):
-	        file = open("restart_status.txt", "w")
-	        file.write("0")
-	        file.close()
-	        await self.bot.say("Rebooting...")
-	        os.execl(sys.executable, sys.executable, *sys.argv)
-	    else:
-	        return
+		"""Restarts Jeeves"""
+		if discord.utils.get(ctx.message.author.roles, name="Admin"):
+			file = open("restart_status.txt", "w")
+			file.write("0")
+			file.close()
+			await self.bot.say("Rebooting...")
+			os.execl(sys.executable, sys.executable, *sys.argv)
+		else:
+			return
 
 	@commands.command(pass_context=True)
 	async def logout(self, ctx):
-	    if discord.utils.get(ctx.message.author.roles, name="Admin"):
-	        await self.bot.say("Goodbye.")
-	        await self.bot.logout()
-	    else:
-	        return
+		"""Shuts Jeeves Down"""
+		if discord.utils.get(ctx.message.author.roles, name="Admin"):
+			await self.bot.say("Goodbye.")
+			await self.bot.logout()
+		else:
+			return
 
 def setup(bot):
 	bot.add_cog(Admin(bot))
