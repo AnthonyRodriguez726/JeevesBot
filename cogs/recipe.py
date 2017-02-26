@@ -11,6 +11,7 @@ class Recipe():
 	# --- RECIPES ---
 	@commands.command(pass_context=True)
 	async def recipe(self, ctx, *, ingredient):
+		"""Searches for a recipe"""
 		url = "https://api.edamam.com/"
 		search = ingredient
 		search_addon = "search?q="+search
@@ -49,12 +50,11 @@ class Recipe():
 	"URL to recipe: <%s> \n"
 		) % (label, calories, url)
 
-		# await self.bot.say(recipe_message)
 		await self.bot.send_file(channel, image_path, content=recipe_message)
 
 	@commands.command()
 	async def get_recipes(self, *, ingredient):
-
+		"""Gets a list of recipes"""
 		if " " in ingredient:
 			split_word = ingredient.rsplit(' ', 1)[0]
 			to_amount = ingredient.rsplit(' ', 1)[1]
@@ -108,6 +108,7 @@ class Recipe():
 
 	@commands.command()
 	async def ingredients(self, *, recipe):
+		"""Displays the ingredients for a specific recipe"""
 		url = "https://api.edamam.com/"
 		search = recipe
 		search_addon = "search?q="+search

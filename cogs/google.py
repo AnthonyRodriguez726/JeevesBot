@@ -249,6 +249,7 @@ class Google():
 
 	@commands.command()
 	async def lmgtfy(self, *, search):
+		"""Let Me Google That For You"""
 		url = "http://lmgtfy.com/?q="
 		search = search.replace(" ", "+")
 		await self.bot.say(url+""+""+search)

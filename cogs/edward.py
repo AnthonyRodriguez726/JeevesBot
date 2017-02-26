@@ -9,6 +9,7 @@ class Edward():
 
 	@commands.command(pass_context=True)
 	async def edward(self, ctx):
+		"""Shows a picture of Edward"""
 		channel = self.bot.get_channel(ctx.message.channel.id)
 		edwards = os.listdir('images/edward/')
 		choice = random.choice(edwards)
