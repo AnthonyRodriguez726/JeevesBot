@@ -8,7 +8,6 @@ class Recipe():
 	def __init__(self, bot):
 		self.bot = bot
 
-	# --- RECIPES ---
 	@commands.command(pass_context=True)
 	async def recipe(self, ctx, *, ingredient):
 		"""Searches for a recipe"""
@@ -23,7 +22,13 @@ class Recipe():
 
 		r = requests.get(full_search)
 		recipe = r.json()
-		
+
+		try:
+			test = recipe["hits"][0]["recipe"]["url"]
+		except:
+			await self.bot.say("There were no recipes matching your search.")
+			return
+
 		url = recipe["hits"][0]["recipe"]["url"]
 		label = recipe["hits"][0]["recipe"]["label"]
 		image = recipe["hits"][0]["recipe"]["image"]
@@ -73,6 +78,8 @@ class Recipe():
 			ingredient = ingredient.replace(" ", "+")
 			to_amount = 5
 
+
+
 		url = "https://api.edamam.com/"
 		search = ingredient
 		search_addon = "search?q="+search
@@ -85,6 +92,12 @@ class Recipe():
 
 		r = requests.get(full_search)
 		recipe = r.json()
+
+		try:
+			test = recipe["hits"][0]["recipe"]["url"]
+		except:
+			await self.bot.say("There were no recipes matching your search.")
+			return
 
 		urls = []
 		counter = 0
@@ -118,6 +131,12 @@ class Recipe():
 
 		r = requests.get(full_search)
 		recipe = r.json()
+
+		try:
+			test = recipe["hits"][0]["recipe"]["url"]
+		except:
+			await self.bot.say("There were no recipes matching your search.")
+			return
 
 		url = recipe["hits"][1]["recipe"]["url"]
 		label = recipe["hits"][0]["recipe"]["label"]
