@@ -8,16 +8,15 @@ class Misc():
 	def __init__(self, bot):
 		self.bot = bot
 
-	@commands.command()
-	async def scissors(self):
-		"""You know how it is"""
-		await self.bot.say("**he was still hanging on... scissoring his legs uselessly...**")
+	# @commands.command()
+	# async def scissors(self):
+	# 	"""You know how it is"""
+	# 	await self.bot.say("**he was still hanging on... scissoring his legs uselessly...**")
 
-	@commands.command(pass_context=True)
+	@commands.command(pass_context=True, hidden=True)
 	async def test(self, ctx):
 		"""Used for testing purposes"""
 		print("test")
-		
 
 	@commands.command(pass_context=True)
 	async def wink(self, ctx):
@@ -69,6 +68,13 @@ class Misc():
 		word_num = int(word_num)
 		word_num -= 1
 		word_amount = len(definitions["list"])
+
+		try:
+			test = definitions["list"][word_num]["word"]
+		except:
+			await self.bot.say("There were no words matching your search.")
+			return
+
 		word = definitions["list"][word_num]["word"]
 		definition = definitions["list"][word_num]["definition"]
 		example = definitions["list"][word_num]["example"]
@@ -100,7 +106,7 @@ class Misc():
 		image = comic["img"] 
 		
 		filename = image.split('/')[-1]
-		urllib.request.urlretrieve(image, "xkcd/"+filename)
+		urllib.request.urlretrieve(image, "images/xkcd/"+filename)
 		image_path = "images/xkcd/"+filename
 
 		await self.bot.send_file(ctx.message.channel, image_path, content=title)
