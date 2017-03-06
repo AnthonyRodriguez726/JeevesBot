@@ -9,7 +9,7 @@ import os, sys
 from discord.ext import commands
 
 
-cogs = ['cogs.edward', 'cogs.misc', 'cogs.user_based', 'cogs.apartment', 'cogs.recipe', 'cogs.admin', 'cogs.steam', 'cogs.google', 'cogs.amazon', 'cogs.wolfram']
+cogs = ['cogs.edward', 'cogs.misc', 'cogs.user_based', 'cogs.apartment', 'cogs.recipe', 'cogs.admin', 'cogs.steam', 'cogs.google', 'cogs.amazon', 'cogs.wolfram', 'cogs.keyevents']
 
 description = 'Jeeves Bot. Your personal helper bot.'
 

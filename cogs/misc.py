@@ -116,6 +116,14 @@ class Misc():
 		image_path = "images/anime.png"
 		await self.bot.send_file(ctx.message.channel, image_path)
 
+	@commands.command()
+	async def plug(self):
+		await self.bot.say("<https://plug.dj/e9d645de>")
+
+	@commands.command()
+	async def list(self):
+		await self.bot.say("List: Heroes of the Storm, League of Legends, Overwatch, Keep Talking and Nobody Explodes, Warcraft 3, Hearthstone, Starcraft 2, Tabletop Simulator, Dungeon Defenders, CS:GO, Town of Salem, Portal 2")
+
 
 def setup(bot):
 	bot.add_cog(Misc(bot))
