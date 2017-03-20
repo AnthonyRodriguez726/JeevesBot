@@ -6,7 +6,7 @@ class Apartment_Only():
 		self.bot = bot
 
 	# --- SHOPPING LIST ---
-	@commands.command()
+	@commands.command(hidden=True)
 	async def add_item(self, item):
 		"""Adds an item to the shopping list"""
 		need_file = open("need_list.txt", "r")
@@ -27,7 +27,7 @@ class Apartment_Only():
 			counter += 1
 		file.close()
 
-	@commands.command()
+	@commands.command(hidden=True)
 	async def remove_item(self, item):
 		"""Removes an item from the shopping list"""
 		need_file = open("need_list.txt", "r")
@@ -47,7 +47,7 @@ class Apartment_Only():
 		file.close()
 		item_message = item + " has been removed from your shopping list."
 
-	@commands.command()
+	@commands.command(hidden=True)
 	async def need_list(self):
 		"""Displays the shopping list"""
 		need_list = "```Here is your current shopping list:\n\n"
@@ -63,7 +63,7 @@ class Apartment_Only():
 		await self.bot.say(need_list)
 
 	# --- TO DO LIST ---
-	@commands.command()
+	@commands.command(hidden=True)
 	async def add_task(self, item):
 		"""Adds a task to the to do list"""
 		need_file = open("to_do.txt", "r")
@@ -84,7 +84,7 @@ class Apartment_Only():
 			counter += 1
 		file.close()
 
-	@commands.command()
+	@commands.command(hidden=True)
 	async def remove_task(self, item):
 		"""Removes a task from the to do list"""
 		need_file = open("to_do.txt", "r")
@@ -105,7 +105,7 @@ class Apartment_Only():
 		task_message = item + " has been removed from the to do list."
 		await self.bot.say(task_message)
 
-	@commands.command()
+	@commands.command(hidden=True)
 	async def to_do(self):
 		"""Displays the to do list"""
 		to_do = "```Here is your current to do list:\n\n"

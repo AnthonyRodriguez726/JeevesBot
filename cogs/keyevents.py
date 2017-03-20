@@ -91,7 +91,7 @@ class KeyEvents():
 	def __init__(self, bot):
 		self.bot = bot
 
-	@commands.command()
+	@commands.command(hidden=True)
 	async def ctype(self):
 
 		ctypes.windll.user32.LockWorkStation()

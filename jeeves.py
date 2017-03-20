@@ -11,7 +11,7 @@ from discord.ext import commands
 
 cogs = ['cogs.edward', 'cogs.misc', 'cogs.user_based', 'cogs.apartment', 'cogs.recipe', 'cogs.admin', 'cogs.steam', 'cogs.google', 'cogs.amazon', 'cogs.wolfram', 'cogs.keyevents']
 
-description = 'Jeeves Bot. Your personal helper bot.'
+description = 'Jeeves, The Multi-Functional Discord Bot.'
 
 file_status = open("restart_status.txt", "r")
 restart_status = file_status.readline()
@@ -25,7 +25,7 @@ if restart_status == "0":
         print(bot.user.name)
         print(bot.user.id)
         print('------')
-        channel = bot.get_channel('276237909378465794')
+        channel = bot.get_channel('258752107463573504')
         errors = []
         for cog in cogs:
             try:
@@ -49,7 +49,7 @@ elif restart_status == "1":
         print(bot.user.name)
         print(bot.user.id)
         print('------')
-        channel = bot.get_channel('276237909378465794')
+        channel = bot.get_channel('258752107463573504')
         errors = []
         for cog in cogs:
             try:
@@ -73,7 +73,7 @@ else:
         print(bot.user.name)
         print(bot.user.id)
         print('------')
-        channel = bot.get_channel('276237909378465794')
+        channel = bot.get_channel('258752107463573504')
         errors = []
         for cog in cogs:
             try:
