@@ -2,7 +2,10 @@ import discord
 from discord.ext import commands
 import requests
 from random import randint
+import giphypop
 import urllib.request
+
+g = giphypop.Giphy()
 
 class Misc():
 	def __init__(self, bot):
@@ -10,8 +13,8 @@ class Misc():
 
 	# @commands.command()
 	# async def scissors(self):
-	# 	"""You know how it is"""
-	# 	await self.bot.say("**he was still hanging on... scissoring his legs uselessly...**")
+	#   """You know how it is"""
+	#   await self.bot.say("**he was still hanging on... scissoring his legs uselessly...**")
 
 	@commands.command(pass_context=True, hidden=True)
 	async def test(self, ctx):
@@ -81,7 +84,7 @@ class Misc():
 		
 		urban_message = ("```Word: %s \n\n"
 		"Definition: %s \n\n"
-		"Example: %s \n\n\n"
+		"Example: \n%s \n\n\n"
 		"Result %d of %d```"
 		) % (word, definition, example, word_num+1, word_amount)
 
@@ -104,8 +107,8 @@ class Misc():
 
 		title = "**"+comic["safe_title"]+"**"
 		image = comic["img"] 
-		
 		filename = image.split('/')[-1]
+
 		urllib.request.urlretrieve(image, "images/xkcd/"+filename)
 		image_path = "images/xkcd/"+filename
 
@@ -115,6 +118,33 @@ class Misc():
 	async def anime(self, ctx):
 		image_path = "images/anime.png"
 		await self.bot.send_file(ctx.message.channel, image_path)
+
+	@commands.command()
+	async def plug(self):
+		"""Link to plug.dj room"""
+		await self.bot.say("<https://plug.dj/e9d645de>")
+
+	@commands.command()
+	async def list(self):
+		"""List of games"""
+		await self.bot.say("List: Heroes of the Storm, League of Legends, Overwatch, Keep Talking and Nobody Explodes, Warcraft 3, Hearthstone, Starcraft 2, Tabletop Simulator, Dungeon Defenders, CS:GO, Town of Salem, Portal 2, Rock of Ages, Rocket League")
+
+
+	async def on_message(self, message):
+		custom = self.bot.get_all_emojis()
+		if '420' in message.content:
+			await self.bot.add_reaction(message, '\U0001F448')
+			await self.bot.add_reaction(message, '\u0034\u20E3')
+			await self.bot.add_reaction(message, '\u0032\u20E3')
+			await self.bot.add_reaction(message, '\u0030\u20E3')
+			await self.bot.add_reaction(message, '\U0001F449')
+	
+		if '4:20' in message.content:
+			await self.bot.add_reaction(message, '\U0001F448')
+			await self.bot.add_reaction(message, '\u0034\u20E3')
+			await self.bot.add_reaction(message, '\u0032\u20E3')
+			await self.bot.add_reaction(message, '\u0030\u20E3')
+			await self.bot.add_reaction(message, '\U0001F449')
 
 
 def setup(bot):

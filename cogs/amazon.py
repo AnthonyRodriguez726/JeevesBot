@@ -12,7 +12,7 @@ class Amazon():
 
 	@commands.command(pass_context=True)
 	async def amazon(self, ctx, *, product):
-		"""Searches amazon and gets the top result"""
+		"""Searches amazon and gets the top result. (Not very smart)"""
 		products = amazon.search_n(1, Keywords=product, SearchIndex='All')
 		channel = ctx.message.channel
 		title = products[0].title

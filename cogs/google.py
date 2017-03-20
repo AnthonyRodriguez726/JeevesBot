@@ -3,6 +3,7 @@ from discord.ext import commands
 import aiohttp
 from lxml import html
 from lxml import etree
+from keys import google_key
 from urllib.parse import parse_qs
 
 class Google():
