@@ -16,5 +16,5 @@ Jeeves's functionality includes, but is not limited to:
 6. A few other small tasks
 
 
-]]></content>
+</content>
 </snippet>
