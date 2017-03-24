@@ -1,5 +1,21 @@
-Jeeves Bot.
+<snippet>
+  <content><![CDATA[
+# ${1:Jeeves}
 
-An all in one discord bot.
+A Multi-Functional Discord Bot.
 
-Current Version: 0.5
+## Usage
+
+Jeeves's functionality includes, but is not limited to:
+
+1. Searching Google
+2. Searching Amazon
+3. Utilizing Wolfram Alpha's API
+4. Utilizing Edamam's API
+5. Grabbing Top Sellers, Current Deals, etc. from Steam
+6. A few other small tasks
+
+
+]]></content>
+  <tabTrigger>readme</tabTrigger>
+</snippet>
