@@ -1,6 +1,6 @@
 <snippet>
   <content><![CDATA[
-# ${1:Jeeves}
+# ${1:Project Name}
 
 A Multi-Functional Discord Bot.
 
@@ -17,5 +17,4 @@ Jeeves's functionality includes, but is not limited to:
 
 
 ]]></content>
-  <tabTrigger>readme</tabTrigger>
 </snippet>
