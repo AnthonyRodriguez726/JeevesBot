@@ -1,9 +1,7 @@
 <snippet>
   <content><![CDATA[
 
-## Jeeves
-
-A Multi-Functional Discord Bot.
+Jeeves, A Multi-Functional Discord Bot.
 
 ## Usage
 
