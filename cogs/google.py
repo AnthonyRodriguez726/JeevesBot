@@ -5,6 +5,9 @@ from lxml import html
 from lxml import etree
 from keys import google_key
 from urllib.parse import parse_qs
+from cogs.log import *
+
+class_name = 'google'
 
 class Google():
 	def __init__(self, bot):
@@ -224,6 +227,7 @@ class Google():
 	@commands.command(aliases=['google'])
 	async def g(self, *, query):
 		"""Searches google and gives you top result."""
+		command = sys._getframe().f_code.co_name
 		await self.bot.type()
 		try:
 			card, entries = await self.get_google_entries(query)
@@ -247,13 +251,16 @@ class Google():
 				msg = entries[0]
 
 			await self.bot.say(msg)
+		log(class_name, command)
 
 	@commands.command()
 	async def lmgtfy(self, *, search):
 		"""Let Me Google That For You"""
+		command = sys._getframe().f_code.co_name
 		url = "http://lmgtfy.com/?q="
 		search = search.replace(" ", "+")
 		await self.bot.say(url+""+""+search)
+		log(class_name, command)
 
 
 def setup(bot):

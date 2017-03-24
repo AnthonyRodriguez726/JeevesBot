@@ -3,6 +3,9 @@ from discord.ext import commands
 import requests
 from keys import food_id, food_key
 import urllib.request
+from cogs.log import *
+
+class_name = 'recipe'
 
 class Recipe():
 	def __init__(self, bot):
@@ -11,6 +14,7 @@ class Recipe():
 	@commands.command(pass_context=True)
 	async def recipe(self, ctx, *, ingredient):
 		"""Searches for a recipe"""
+		command = sys._getframe().f_code.co_name
 		url = "https://api.edamam.com/"
 		search = ingredient
 		search_addon = "search?q="+search
@@ -56,10 +60,12 @@ class Recipe():
 		) % (label, calories, url)
 
 		await self.bot.send_file(channel, image_path, content=recipe_message)
+		log(class_name, command)
 
 	@commands.command()
 	async def get_recipes(self, *, ingredient):
 		"""Gets a list of recipes"""
+		command = sys._getframe().f_code.co_name
 		if " " in ingredient:
 			split_word = ingredient.rsplit(' ', 1)[0]
 			to_amount = ingredient.rsplit(' ', 1)[1]
@@ -118,10 +124,12 @@ class Recipe():
 			recipe_counter += 1
 
 		await self.bot.say(recipes_message)
+		log(class_name, command)
 
 	@commands.command()
 	async def ingredients(self, *, recipe):
 		"""Displays the ingredients for a specific recipe"""
+		command = sys._getframe().f_code.co_name
 		url = "https://api.edamam.com/"
 		search = recipe
 		search_addon = "search?q="+search
@@ -150,6 +158,7 @@ class Recipe():
 		ingredients_message += "\n<%s>" % (url)
 
 		await self.bot.say(ingredients_message)
+		log(class_name, command)
 
 def setup(bot):
 	bot.add_cog(Recipe(bot))

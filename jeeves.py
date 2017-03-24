@@ -35,10 +35,10 @@ if restart_status == "0":
                 errors.append("true")
             print("{} loaded.".format(cog))
 
-        if "true" in errors:
-            await bot.send_message(channel, 'Jeeves Online. Some Cogs Misfunctioned on Start-Up.')
-        else:
-            await bot.send_message(channel, 'Jeeves Online. All Cogs Loaded.')
+        # if "true" in errors:
+        #     await bot.send_message(channel, 'Jeeves Online. Some Cogs Misfunctioned on Start-Up.')
+        # else:
+        #     await bot.send_message(channel, 'Jeeves Online. All Cogs Loaded.')
 
 elif restart_status == "1":
     bot = commands.Bot(command_prefix='!', self_bot=True)
@@ -59,10 +59,10 @@ elif restart_status == "1":
                 errors.append("true")
             print("{} loaded.".format(cog))
 
-        if "true" in errors:
-            await bot.send_message(channel, 'Self Bot Online. Some Cogs Misfunctioned on Start-Up.')
-        else:
-            await bot.send_message(channel, 'Self Bot Online. All Cogs Loaded.')
+        # if "true" in errors:
+        #     await bot.send_message(channel, 'Self Bot Online. Some Cogs Misfunctioned on Start-Up.')
+        # else:
+        #     await bot.send_message(channel, 'Self Bot Online. All Cogs Loaded.')
 
 else:
     bot = commands.Bot(command_prefix='!', description=description)
@@ -83,10 +83,10 @@ else:
                 errors.append("true")
             print("{} loaded.".format(cog))
 
-        if "true" in errors:
-            await bot.send_message(channel, 'Jeeves Online. Some Cogs Misfunctioned on Start-Up.')
-        else:
-            await bot.send_message(channel, 'Jeeves Online. All Cogs Loaded.')
+        # if "true" in errors:
+        #     await bot.send_message(channel, 'Jeeves Online. Some Cogs Misfunctioned on Start-Up.')
+        # else:
+        #     await bot.send_message(channel, 'Jeeves Online. All Cogs Loaded.')
 
 
 
