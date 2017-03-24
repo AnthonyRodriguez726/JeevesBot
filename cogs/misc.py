@@ -4,45 +4,53 @@ import requests
 from random import randint
 import giphypop
 import urllib.request
+import sys
+import glob, os
+from cogs.log import *
+import ntpath
 
 g = giphypop.Giphy()
+
+class_name = 'misc'
 
 class Misc():
 	def __init__(self, bot):
 		self.bot = bot
 
-	# @commands.command()
-	# async def scissors(self):
-	#   """You know how it is"""
-	#   await self.bot.say("**he was still hanging on... scissoring his legs uselessly...**")
-
 	@commands.command(pass_context=True, hidden=True)
 	async def test(self, ctx):
-		"""Used for testing purposes"""
-		print("test")
+		command = sys._getframe().f_code.co_name
+		log(class_name, command)
 
 	@commands.command(pass_context=True)
 	async def wink(self, ctx):
 		""";)"""
+		command = sys._getframe().f_code.co_name
 		channel = self.bot.get_channel(ctx.message.channel.id)
 		await self.bot.send_file(channel, "images/wink.png")
 		await self.bot.delete_message(ctx.message)
+		log(class_name, command)
 
 	@commands.command()
 	async def servers(self):
 		"""Displays how many servers this bot is being used in"""
+		command = sys._getframe().f_code.co_name
 		servers = str(len(self.bot.servers))
 		server_message = "Jeeves is currently being used on "+servers+" server(s)."
 		await self.bot.say(server_message)
+		log(class_name, command)
 
 	@commands.command()
 	async def how_to_beat_bowser(self):
 		"""Gives the secret behind beating Bowser"""
+		command = sys._getframe().f_code.co_name
 		await self.bot.say("*SLAM HIS HEAD 3 TIMES*")
+		log(class_name, command)
 
 	@commands.command()
 	async def urban(self, *, word):
 		"""Searches Urban Dictionary"""
+		command = sys._getframe().f_code.co_name
 		url = "http://api.urbandictionary.com/v0/define?term="
 
 		if " " in word:
@@ -89,10 +97,12 @@ class Misc():
 		) % (word, definition, example, word_num+1, word_amount)
 
 		await self.bot.say(urban_message)
+		log(class_name, command)
 
 	@commands.command(pass_context=True)
 	async def xkcd(self, ctx):
 		"""Displays a random xkcd comic"""
+		command = sys._getframe().f_code.co_name
 		url = "https://www.xkcd.com/"
 		url_ext = "info.0.json"
 		current_comic = url+url_ext
@@ -113,21 +123,40 @@ class Misc():
 		image_path = "images/xkcd/"+filename
 
 		await self.bot.send_file(ctx.message.channel, image_path, content=title)
+		log(class_name, command)
 
 	@commands.command(pass_context=True)
 	async def anime(self, ctx):
+		command = sys._getframe().f_code.co_name
 		image_path = "images/anime.png"
 		await self.bot.send_file(ctx.message.channel, image_path)
+		log(class_name, command)
 
 	@commands.command()
 	async def plug(self):
+		command = sys._getframe().f_code.co_name
 		"""Link to plug.dj room"""
 		await self.bot.say("<https://plug.dj/e9d645de>")
+		log(class_name, command)
 
 	@commands.command()
 	async def list(self):
 		"""List of games"""
-		await self.bot.say("List: Heroes of the Storm, League of Legends, Overwatch, Keep Talking and Nobody Explodes, Warcraft 3, Hearthstone, Starcraft 2, Tabletop Simulator, Dungeon Defenders, CS:GO, Town of Salem, Portal 2, Rock of Ages, Rocket League")
+		command = sys._getframe().f_code.co_name
+		await self.bot.say("Heroes of the Storm, League of Legends, Overwatch, Keep Talking and Nobody Explodes, Warcraft 3, Hearthstone, Starcraft 2, Tabletop Simulator, Dungeon Defenders, CS:GO, Town of Salem, Portal 2, Rock of Ages, Rocket League, GTA V")
+		log(class_name, command)
+
+	@commands.command()
+	async def logs(self):
+		command = sys._getframe().f_code.co_name
+		coms = []
+		for root, dirs, files in os.walk("command_log"):
+		    for file in files:
+		        if file.endswith(".txt"):
+		             log_path = os.path.join(root, file)
+		             file_name = ntpath.basename(log_path)
+		             command_name = file_name.replace(".txt", "")
+		             print(command_name)
 
 
 	async def on_message(self, message):
@@ -145,7 +174,6 @@ class Misc():
 			await self.bot.add_reaction(message, '\u0032\u20E3')
 			await self.bot.add_reaction(message, '\u0030\u20E3')
 			await self.bot.add_reaction(message, '\U0001F449')
-
 
 def setup(bot):
 	bot.add_cog(Misc(bot))

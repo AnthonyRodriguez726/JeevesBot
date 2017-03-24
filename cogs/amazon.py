@@ -3,8 +3,11 @@ from discord.ext import commands
 from amazon.api import AmazonAPI
 import urllib.request
 from keys import amazon_access_key, amazon_secret_key, amazon_assoc_tag
+from cogs.log import *
 
 amazon = AmazonAPI(amazon_access_key, amazon_secret_key, amazon_assoc_tag)
+
+class_name = "amazon"
 
 class Amazon():
 	def __init__(self, bot):
@@ -13,6 +16,7 @@ class Amazon():
 	@commands.command(pass_context=True)
 	async def amazon(self, ctx, *, product):
 		"""Searches amazon and gets the top result. (Not very smart)"""
+		command = sys._getframe().f_code.co_name
 		products = amazon.search_n(1, Keywords=product, SearchIndex='All')
 		channel = ctx.message.channel
 		title = products[0].title
@@ -31,6 +35,7 @@ class Amazon():
 			) % (title, price, url)
 
 		await self.bot.send_file(channel, image_path, content=amazon_message)
+		log(class_name, command)
 
 def setup(bot):
 	bot.add_cog(Amazon(bot))
