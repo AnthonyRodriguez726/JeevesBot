@@ -1,6 +1,8 @@
 <snippet>
   <content><![CDATA[
-# ${1:Project Name}
+# ${1:Jeeves}
+
+## Jeeves
 
 A Multi-Functional Discord Bot.
 
