@@ -6,6 +6,7 @@ from urllib.request import urlopen
 import requests
 from keys import wolfram_id
 from cogs.log import *
+from PIL import Image
 
 class_name = 'wolfram'
 
@@ -30,6 +31,7 @@ class Wolfram():
 	@commands.command(pass_context=True)
 	async def wolfram(self, ctx, *, search):
 		"""A Bit Smarter Wolfram Alpha Search"""
+		await self.bot.type()
 		command = sys._getframe().f_code.co_name
 		urlsearch = search.replace(" ", "+")
 		url = "http://api.wolframalpha.com/v1/simple?appid=" + wolfram_id + "&i=" + urlsearch + ""

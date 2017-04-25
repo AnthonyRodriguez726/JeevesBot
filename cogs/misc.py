@@ -149,14 +149,45 @@ class Misc():
 	@commands.command()
 	async def logs(self):
 		command = sys._getframe().f_code.co_name
-		coms = []
+		file_paths = []
+		commands = []
+		usage = []
+		command_log = {}
 		for root, dirs, files in os.walk("command_log"):
-		    for file in files:
-		        if file.endswith(".txt"):
-		             log_path = os.path.join(root, file)
-		             file_name = ntpath.basename(log_path)
-		             command_name = file_name.replace(".txt", "")
-		             print(command_name)
+			for file in files:
+				if file.endswith(".txt"):
+					log_path = os.path.join(root, file)
+					file_name = ntpath.basename(log_path)
+					file_paths.append(log_path)
+					command_name = file_name.replace(".txt", "")
+					commands.append(command_name)
+
+		command_length = len(file_paths)
+		for path in file_paths:
+			file_object = open(path, "r")
+			times_used = file_object.readline()
+			usage.append(times_used)
+		print(usage)
+		counter = 0
+		quick_counter = 0
+		for time in usage:
+			for time in usage:
+				primary = usage[counter]
+				compare = usage[quick_counter]
+				if primary > compare:
+					temp = usage[counter]
+					usage[counter] = usage[quick_counter]
+					usage[quick_counter] = temp
+				quick_counter += 1
+				if quick_counter >= len(usage):
+					quick_counter = 0
+			counter += 1
+		print(usage)
+
+
+
+
+
 
 
 	async def on_message(self, message):
