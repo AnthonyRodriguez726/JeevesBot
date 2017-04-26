@@ -190,8 +190,13 @@ class Misc():
 		"""Creates a simple thumbs up/down poll"""
 		await self.bot.delete_message(ctx.message)
 		bot_message = await self.bot.say(question)
-		await self.bot.add_reaction(bot_message, '\U0001F44D')
-		await self.bot.add_reaction(bot_message, '\U0001F44E')
+		if ' or ' in question:
+			await self.bot.add_reaction(bot_message, '\u0031\u20E3')
+			await self.bot.add_reaction(bot_message, '\u0032\u20E3')
+		else:
+			await self.bot.add_reaction(bot_message, '\U0001F44D')
+			await self.bot.add_reaction(bot_message, '\U0001F44E')
+		
 
 
 
