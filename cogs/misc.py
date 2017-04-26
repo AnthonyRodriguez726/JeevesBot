@@ -185,6 +185,16 @@ class Misc():
 		print(usage)
 
 
+	@commands.command(pass_context=True)
+	async def poll(self, ctx, question):
+		"""Creates a simple thumbs up/down poll"""
+		await self.bot.delete_message(ctx.message)
+		bot_message = await self.bot.say(question)
+		await self.bot.add_reaction(bot_message, '\U0001F44D')
+		await self.bot.add_reaction(bot_message, '\U0001F44E')
+
+
+
 
 
 
