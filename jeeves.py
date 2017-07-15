@@ -9,7 +9,7 @@ import os, sys
 from discord.ext import commands
 
 
-cogs = ['cogs.edward', 'cogs.misc', 'cogs.user_based', 'cogs.apartment', 'cogs.recipe', 'cogs.admin', 'cogs.steam', 'cogs.google', 'cogs.amazon', 'cogs.wolfram', 'cogs.keyevents']
+
 
 description = 'Jeeves, The Multi-Functional Discord Bot.'
 
@@ -18,7 +18,7 @@ restart_status = file_status.readline()
 
 if restart_status == "0":
     bot = commands.Bot(command_prefix='!', description=description)
-
+    cogs = ['cogs.edward', 'cogs.misc', 'cogs.user_based', 'cogs.apartment', 'cogs.recipe', 'cogs.admin', 'cogs.steam', 'cogs.google', 'cogs.amazon', 'cogs.wolfram', 'cogs.keyevents']
     @bot.event
     async def on_ready():
         print('Logged in as')
@@ -42,7 +42,7 @@ if restart_status == "0":
 
 elif restart_status == "1":
     bot = commands.Bot(command_prefix='!', self_bot=True)
-
+    cogs = ['cogs.edward', 'cogs.misc', 'cogs.user_based', 'cogs.apartment', 'cogs.recipe', 'cogs.admin', 'cogs.steam', 'cogs.google', 'cogs.amazon', 'cogs.wolfram', 'cogs.keyevents']
     @bot.event
     async def on_ready():
         print('Logged in as')
@@ -64,9 +64,35 @@ elif restart_status == "1":
         else:
             await bot.send_message(channel, 'Self Bot Online. All Cogs Loaded.')
 
+
+elif restart_status == "a":
+    bot = commands.Bot(command_prefix='!', description=description)
+    cogs = ['cogs.edward', 'cogs.misc', 'cogs.user_based', 'cogs.apartment', 'cogs.recipe', 'cogs.admin', 'cogs.steam', 'cogs.google', 'cogs.amazon', 'cogs.wolfram', 'cogs.keyevents', 'cogs.andrei']
+    @bot.event
+    async def on_ready():
+        print('Logged in as')
+        print(bot.user.name)
+        print(bot.user.id)
+        print('------')
+        channel = bot.get_channel('276237909378465794')
+        errors = []
+        for cog in cogs:
+            try:
+                bot.load_extension(cog)
+            except (AttributeError, ImportError) as e:
+                print("```py\n{}: {}\n```".format(type(e).__name__, str(e)))
+                errors.append("true")
+            print("{} loaded.".format(cog))
+
+        if "true" in errors:
+            await bot.send_message(channel, 'Jeeves Online. Some Cogs Misfunctioned on Start-Up.')
+        else:
+            await bot.send_message(channel, 'Jeeves Online. All Cogs Loaded.')
+
+
 else:
     bot = commands.Bot(command_prefix='!', description=description)
-
+    cogs = ['cogs.edward', 'cogs.misc', 'cogs.user_based', 'cogs.apartment', 'cogs.recipe', 'cogs.admin', 'cogs.steam', 'cogs.google', 'cogs.amazon', 'cogs.wolfram', 'cogs.keyevents']
     @bot.event
     async def on_ready():
         print('Logged in as')

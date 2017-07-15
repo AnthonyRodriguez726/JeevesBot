@@ -9,18 +9,13 @@ import glob, os
 from cogs.log import *
 import ntpath
 
-g = giphypop.Giphy()
-
-class_name = 'misc'
-
 class Misc():
 	def __init__(self, bot):
 		self.bot = bot
 
 	@commands.command(pass_context=True, hidden=True)
 	async def test(self, ctx):
-		command = sys._getframe().f_code.co_name
-		log(class_name, command)
+		print(ctx.message.author)
 
 	@commands.command(pass_context=True)
 	async def wink(self, ctx):
@@ -189,23 +184,20 @@ class Misc():
 	async def poll(self, ctx, *, question):
 		"""Creates a simple thumbs up/down poll"""
 		await self.bot.delete_message(ctx.message)
+		print(ctx.message.author)
+		print(question)
 		bot_message = await self.bot.say(question)
 		if ' or ' in question:
-			await self.bot.add_reaction(bot_message, '\u0031\u20E3')
-			await self.bot.add_reaction(bot_message, '\u0032\u20E3')
+			await self.bot.add_reaction(bot_message, '\U0001F170')
+			await self.bot.add_reaction(bot_message, '\U0001F171')
 		else:
 			await self.bot.add_reaction(bot_message, '\U0001F44D')
 			await self.bot.add_reaction(bot_message, '\U0001F44E')
-		
 
-
-
-
-
-
-
-
-	async def on_message(self, message):
+	"""async def on_message(self, message):
+		if message.author.id == 140722560223543296:
+			print(message.author)
+			await self.bot.delete_message(message)
 		custom = self.bot.get_all_emojis()
 		if '420' in message.content:
 			await self.bot.add_reaction(message, '\U0001F448')
@@ -220,6 +212,6 @@ class Misc():
 			await self.bot.add_reaction(message, '\u0032\u20E3')
 			await self.bot.add_reaction(message, '\u0030\u20E3')
 			await self.bot.add_reaction(message, '\U0001F449')
-
+	"""
 def setup(bot):
 	bot.add_cog(Misc(bot))
